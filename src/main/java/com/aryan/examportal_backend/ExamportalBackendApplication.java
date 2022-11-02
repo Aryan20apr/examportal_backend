@@ -2,23 +2,35 @@ package com.aryan.examportal_backend;
 
 
 
-import java.util.HashSet;
-import java.util.Set;
 
+
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.aryan.examportal_backend.model.Role;
-import com.aryan.examportal_backend.model.User;
-import com.aryan.examportal_backend.model.UserRole;
 import com.aryan.examportal_backend.services.UserService;
 
 @SpringBootApplication
 public class ExamportalBackendApplication /* implements CommandLineRunner */ {
-	@Autowired
-	private UserService userService;
+	
+	@Bean
+	public ModelMapper modelMapper()
+	{
+		return new ModelMapper();
+	}
+	/*
+	 * @Autowired private UserService userService;
+	 */
+	@Bean
+	BCryptPasswordEncoder bCryptPasswordEncoder()
+	{
+		return new BCryptPasswordEncoder();
+	}
 	
 	public static void main(String[] args) {
 		SpringApplication.run(ExamportalBackendApplication.class, args);

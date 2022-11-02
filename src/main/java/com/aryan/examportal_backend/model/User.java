@@ -1,5 +1,6 @@
 package com.aryan.examportal_backend.model;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,12 +13,17 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="users")
-public class User {
-
+public class User implements UserDetails //Make User as the implementation class of UserDetail interface
+{
+//Wherever Spring requires UserDetails, pass the User class instance
+	
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -116,12 +122,47 @@ public class User {
 
 
 	public Set<UserRole> getUserRoles() {
+		System.out.println("User Roles:"+userRoles);
 		return userRoles;
 	}
 
 
 	public void setUserRoles(Set<UserRole> userRoles) {
+		System.out.println("UserRoles:"+userRoles);
 		this.userRoles = userRoles;
+	}
+	/***********************************************************************************/
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		//Authority is role- admin or normal
+		
+		Set<Authority> set=new HashSet<>();
+		this.userRoles.forEach(userRole->{
+			set.add(new Authority(userRole.getRole().getRoleName()));
+		});
+		return null;
+	}
+
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;//false;
+	}
+
+
+	@Override
+	public boolean isAccountNonLocked() {
+		//
+		return true;//false;
+	}
+
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;//false;
 	}
 	
 	
