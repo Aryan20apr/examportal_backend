@@ -5,11 +5,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.validation.Valid;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,8 +43,8 @@ public class UserController {
 	
 	@Autowired
 	ModelMapper modelMapper;
-	@PostMapping("/")
-	public ResponseEntity<ApiResponse<UserDTO>> createUser(@RequestBody UserDTO user ) throws Exception
+	@PostMapping("/newuser")
+	public ResponseEntity<ApiResponse<UserDTO>> createUser(@Valid @RequestBody UserDTO user ) throws Exception
 	{
 		
 		UserDTO newUser=userService.createUser(user);
@@ -60,7 +62,7 @@ public class UserController {
 		return userService.getUserByUserName(username);
 	}
 	//delete user by id
-	
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/deleteUser")
 	public ResponseEntity<ApiResponse<Map<String,String>>> deleteUserById(@RequestParam Long userid)
 	
@@ -73,7 +75,7 @@ public class UserController {
 	}
 	
 	@PutMapping("/updateUser/{username}")
-	public ResponseEntity<ApiResponse<UserDTO>> updateUser(@RequestBody UserDTO updatedUser,@PathVariable String username)
+	public ResponseEntity<ApiResponse<UserDTO>> updateUser(@Valid @RequestBody UserDTO updatedUser,@PathVariable String username)
 	{
 		UserDTO user=userService.updateUser(updatedUser,username);
 		ApiResponse<UserDTO> apiResponse=new ApiResponse<>(user,HttpStatus.ACCEPTED,true);

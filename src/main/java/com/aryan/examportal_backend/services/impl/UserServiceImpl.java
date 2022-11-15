@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
+import com.aryan.examportal_backend.exceptions.UserAlreadyExistException;
 import com.aryan.examportal_backend.model.Role;
 import com.aryan.examportal_backend.model.User;
 import com.aryan.examportal_backend.model.UserRole;
@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService{
 		User exisitingUser=this.userRepository.findByUsername(user.getUsername());
 		if(exisitingUser!=null) {
 			System.out.println("User is already present");
-			throw new Exception("User Already Present");
+			throw new UserAlreadyExistException(user.getUsername(),"User with this username already exist");
 		}
 		else {
 			Set<UserRole> userRoles=new HashSet<>();

@@ -36,7 +36,7 @@ public class SecurityConfig {
 	@Autowired
 	private JwtAuthenticationFilter jwtAuthenticationFilter;
 	
-	  public static final String[] PUBLIC_URLS = { "/generate-token","/user/"};
+	  public static final String[] PUBLIC_URLS = { "/generate-token","/user/newuser","/"};
 	
 	 @Bean
 	    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -47,7 +47,7 @@ public class SecurityConfig {
 	                .authorizeHttpRequests()
 	                .antMatchers(PUBLIC_URLS)
 	                .permitAll()
-	                .antMatchers(HttpMethod.OPTIONS)
+					.antMatchers( HttpMethod.OPTIONS )
 	                .permitAll()
 	                .anyRequest()
 	                .authenticated()//Authenticate any other request which is received

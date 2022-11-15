@@ -71,9 +71,10 @@ public class AuthenticationController {
 			return ResponseEntity.ok(new JWTResponse(token));
 	}
 	@GetMapping("/current-user")
-	public UserDTO  getCurrentUser(Principal principal)
+	public User  getCurrentUser(Principal principal)
 	{
-		return (UserDTO)userDetailService.loadUserByUsername(principal.getName());
+		
+		return (User)userDetailService.loadUserByUsername(principal.getName());
 	}
 	
 }
