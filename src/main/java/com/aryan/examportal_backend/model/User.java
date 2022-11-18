@@ -30,8 +30,8 @@ public class User implements UserDetails //Make User as the implementation class
 	private Long id;
 	private String username;
 	private String password;
-	private String firstName;
-	private String lastName;
+	private String firstname;
+	private String lastname;
 	private String email;
 	private String phone;
 	private boolean enabled=true;
@@ -48,14 +48,14 @@ public class User implements UserDetails //Make User as the implementation class
 }
 	
 	
-	public User(Long id, String username, String password, String firstName, String lastName, String email,
+	public User(Long id, String username, String password, String firstname, String lastName, String email,
 			String phone, boolean enabled, String profileImage) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.password = password;
-		this.firstName = firstName;
-		this.lastName = lastName;
+		this.firstname = firstname;
+		this.lastname = lastName;
 		this.email = email;
 		this.phone = phone;
 		this.enabled = enabled;
@@ -84,16 +84,16 @@ public class User implements UserDetails //Make User as the implementation class
 		this.password = password;
 	}
 	public String getFirstName() {
-		return firstName;
+		return firstname;
 	}
 	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+		this.firstname = firstName;
 	}
 	public String getLastName() {
-		return lastName;
+		return lastname;
 	}
 	public void setLastName(String lastName) {
-		this.lastName = lastName;
+		this.lastname = lastName;
 	}
 	public String getEmail() {
 		return email;

@@ -1,9 +1,7 @@
 package com.aryan.examportal_backend.examcontroller;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -22,18 +20,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aryan.examportal_backend.model.Role;
-import com.aryan.examportal_backend.model.User;
-import com.aryan.examportal_backend.model.UserRole;
+import com.aryan.examportal_backend.ApiResponse2;
+import com.aryan.examportal_backend.Constants.PasswordChangeStatus;
 import com.aryan.examportal_backend.payload.ApiResponse;
+import com.aryan.examportal_backend.payload.PasswordChangeDTO;
 import com.aryan.examportal_backend.payload.UserDTO;
 import com.aryan.examportal_backend.services.UserService;
-import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Dynamic;
-
-import lombok.var;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("examportal/user")
 //@CrossOrigin("*") 
 public class UserController {
 
@@ -62,7 +57,7 @@ public class UserController {
 		return userService.getUserByUserName(username);
 	}
 	//delete user by id
-	@PreAuthorize("hasRole('ADMIN')")
+	 @PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/deleteUser")
 	public ResponseEntity<ApiResponse<Map<String,String>>> deleteUserById(@RequestParam Long userid)
 	
@@ -82,7 +77,31 @@ public class UserController {
 		return new ResponseEntity<ApiResponse<UserDTO>>(apiResponse,HttpStatus.ACCEPTED);
 	}
 	
-	
+	@PostMapping("/changepassword")
+    public ResponseEntity<ApiResponse2> changePassword(@Valid @RequestBody PasswordChangeDTO passinfo )
+    {
+        PasswordChangeStatus b=userService.changePassword(passinfo);
+        ApiResponse2 response=new ApiResponse2();
+        
+        if(PasswordChangeStatus.PASSWORD_CHANGED==b)
+        {
+            response.setMessage("Password changed successfully");
+            response.setSuccess(true);
+            return new ResponseEntity<ApiResponse2>(response,HttpStatus.OK);
+        }
+        else if(PasswordChangeStatus.PASSWORD_INCORRECT==b)
+        {
+            response.setMessage("Password entered is incorrect");
+            response.setSuccess(false);
+            return new ResponseEntity<ApiResponse2>(response,HttpStatus.UNAUTHORIZED);
+        }
+        else {
+            response.setMessage("User Does Not exist with this email");
+            response.setSuccess(false);
+            return new ResponseEntity<ApiResponse2>(response,HttpStatus.UNAUTHORIZED);
+        }
+        
+    }
 	
 	
 }

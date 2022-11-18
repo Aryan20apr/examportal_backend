@@ -36,7 +36,8 @@ public class SecurityConfig {
 	@Autowired
 	private JwtAuthenticationFilter jwtAuthenticationFilter;
 	
-	  public static final String[] PUBLIC_URLS = { "/generate-token","/user/newuser","/"};
+	public static final String[] PUBLIC_URLS = {
+			/* "/generate-token" *//* ,"/user/newuser", *//* "/", */"/examportal/auth/**"};
 	
 	 @Bean
 	    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

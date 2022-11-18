@@ -35,11 +35,11 @@ public class UserDTO {
 	@NotNull
 	 @NotBlank
 		@Size(min = 2,message = "First name cannot be less than 2 characters in length")
-	private String firstName;
+	private String firstname;
 		@NotNull
 		@NotBlank
 		@Size(min = 2,message = "Last name cannot be less than 2 characters in length")
-	private String lastName;
+	private String lastname;
 	
 	@NotNull
 		 @NotBlank
