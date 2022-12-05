@@ -3,6 +3,7 @@ package com.aryan.examportal_backend.services.impl;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.LongFunction;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -15,6 +16,7 @@ import com.aryan.examportal_backend.model.Quiz;
 import com.aryan.examportal_backend.payload.QuizDTO;
 
 import com.aryan.examportal_backend.repository.QuizRepository;
+import com.aryan.examportal_backend.repository.UserRepository;
 import com.aryan.examportal_backend.services.QuizService;
 
 import lombok.With;
@@ -25,11 +27,16 @@ public class QuizServiceImpl implements QuizService {
 	private QuizRepository quizRepository;
 	
 	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
 	private ModelMapper modelMapper;
 
 	@Override
-	public QuizDTO addQuiz(QuizDTO quiz) {
+	public QuizDTO addQuiz(QuizDTO quiz,int userId) 
+	{
 		Quiz quiz1=modelMapper.map(quiz, Quiz.class);
+		quiz1.setUser(userRepository.findById((long)(userId)).get());
 		Quiz savedQuiz=quizRepository.save(quiz1);
 		return modelMapper.map(savedQuiz, QuizDTO.class);
 	}
@@ -59,8 +66,9 @@ public class QuizServiceImpl implements QuizService {
 	}
 
 	@Override
-	public QuizDTO updateQuiz(QuizDTO quiz) {
+	public QuizDTO updateQuiz(QuizDTO quiz,long userid) {
 		Quiz quiz1=modelMapper.map(quiz, Quiz.class);
+		quiz1.setUser(userRepository.findById((long)(userid)).get());
 		Quiz savedQuiz=quizRepository.save(quiz1);
 		return modelMapper.map(savedQuiz, QuizDTO.class);
 	}
@@ -69,6 +77,29 @@ public class QuizServiceImpl implements QuizService {
 	public List<QuizDTO> getQuizzesByCategory(Long cid) {
 		List<Quiz> quizzesList=quizRepository.findByCategoryCid(cid);
 		List<QuizDTO>quizzes= quizzesList.stream().map((cat)-> this.modelMapper.map(cat, QuizDTO.class)).collect(Collectors.toList());
+		return quizzes;
+	}
+
+	@Override
+	public List<QuizDTO> getActiveQuizes() {
+		
+		List<Quiz> quizList=quizRepository.findActiveQuizes();
+		List<QuizDTO>quizzes= quizList.stream().map((quiz)-> this.modelMapper.map(quiz, QuizDTO.class)).collect(Collectors.toList());
+		return quizzes;
+	}
+
+	@Override
+	public List<QuizDTO> getActiveQuizesByCategory(Long cid) {
+		List<Quiz> quizList=quizRepository.findActiveQuizesByCategoryCid(cid);
+		List<QuizDTO>quizzes= quizList.stream().map((quiz)-> this.modelMapper.map(quiz, QuizDTO.class)).collect(Collectors.toList());
+		return quizzes;
+		
+	}
+
+	@Override
+	public List<QuizDTO> getQuizzesByUser(Long userid,Long cid) {
+		List<Quiz> quizList=quizRepository.findByUserIdOfCategory(userid,cid);
+		List<QuizDTO>quizzes= quizList.stream().map((quiz)-> this.modelMapper.map(quiz, QuizDTO.class)).collect(Collectors.toList());
 		return quizzes;
 	}
 	

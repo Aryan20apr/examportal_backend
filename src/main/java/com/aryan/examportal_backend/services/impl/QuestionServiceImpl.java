@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.aryan.examportal_backend.model.Question;
 import com.aryan.examportal_backend.model.Quiz;
 import com.aryan.examportal_backend.payload.QuestionDTO;
+import com.aryan.examportal_backend.payload.QuizResultDTO;
 import com.aryan.examportal_backend.repository.QuestionRepository;
 import com.aryan.examportal_backend.repository.QuizRepository;
 import com.aryan.examportal_backend.services.QuestionService;
@@ -33,15 +34,21 @@ public class QuestionServiceImpl implements QuestionService {
 	private ModelMapper modelMapper;
 	
 	@Override
-	public QuestionDTO addQuestion(QuestionDTO question) {
+	public QuestionDTO addQuestion(QuestionDTO question,Long qid) {
+		
 		Question question1=modelMapper.map(question, Question.class);
+		Quiz q=quizRepository.findById(qid).get();
+		question1.setQuiz(q);
 		Question savedQuestion=questionRepository.save(question1);
 		return modelMapper.map(savedQuestion,QuestionDTO.class);
 	}
 
 	@Override
-	public QuestionDTO updateQuestion(QuestionDTO question) {
+	public QuestionDTO updateQuestion(QuestionDTO question/* ,long qid */) {
 		Question question1=modelMapper.map(question, Question.class);
+		System.out.println("Question is is"+question.getQId());
+		Question q=questionRepository.findById(question.getQId()).get();
+		question1.setQuiz(q.getQuiz());
 		Question savedQuestion=questionRepository.save(question1);
 		return modelMapper.map(savedQuestion,QuestionDTO.class);
 		
@@ -73,7 +80,7 @@ public class QuestionServiceImpl implements QuestionService {
 		Optional<Quiz> q =quizRepository.findById(quizId);
 		Quiz quiz=q.get();
 		int numberOfQuestions=quiz.getNumberOfQuestions();
-		Set<Question> questions=quiz.getQuestions();
+		List<Question> questions=questionRepository.findByQuiz(q);
 		List<Question> questionList=new ArrayList<>(questions);
 		
 		//We will send only that much questions as the number of questions in the quiz
@@ -87,5 +94,63 @@ public class QuestionServiceImpl implements QuestionService {
 		Collections.shuffle(questionDTOs);//Shuffle the order of questions everytime the function is called
 		return questionDTOs;
 	}
+	@Override
+	public List<QuestionDTO> getAllQuestionsOfQuiz(Long quizId) {
+		Optional<Quiz> q =quizRepository.findById(quizId);
+		Quiz quiz=q.get();
+		//int numberOfQuestions=quiz.getNumberOfQuestions();
+		//Set<Question> questions=quiz.getQuestions();
+		List<Question> questionList=questionRepository.findByQuiz(q);
+		
+		//We will send only that much questions as the number of questions in the quiz
+		/*
+		 * List<QuestionDTO> questionDTOs; if(questionList.size()>numberOfQuestions) {
+		 * questionList=questionList.subList(0, numberOfQuestions+1);
+		 * 
+		 * }
+		 */
+		List<QuestionDTO> questionDTOs= questionList.stream().map((cat)-> this.modelMapper.map(cat, QuestionDTO.class)).collect(Collectors.toList());
+		Collections.shuffle(questionDTOs);//Shuffle the order of questions everytime the function is called
+		return questionDTOs;
+	}
+
+	@Override
+	public QuizResultDTO evaluateQuiz(List<QuestionDTO> responses) {
+		
+		double totalMarksObtained=0.0;
+		Integer correctAnswers=0;
+		Integer attempted=0;
+		double passpercent=40.0;
+		int maxMarks=0;
+		for(QuestionDTO q: responses)
+		{
+			Question question=	questionRepository.findById(q.getQId()).get();
+			if(question.getAnswer().trim().equals(q.getGivenAnswer().trim()))
+			{
+				correctAnswers++;
+				
+				maxMarks=question.getQuiz().getMaxMarks();
+				double marksSingle=maxMarks/question.getQuiz().getNumberOfQuestions();
+				System.out.println("maxMarks="+maxMarks+ "number of questions "+question.getQuiz().getNumberOfQuestions());
+				totalMarksObtained+=marksSingle;
+			}
+			if(q.getGivenAnswer()!=null||!q.getGivenAnswer().trim().equals("")) {
+			attempted++;
+			}
+			
+		}
+		QuizResultDTO quizResultDTO=new QuizResultDTO();
+		quizResultDTO.setTotalAttempted(attempted);
+		quizResultDTO.setCorrectAnswers(correctAnswers);
+		quizResultDTO.setTotalMarksObtained(totalMarksObtained);
+		if(totalMarksObtained/maxMarks*100>=passpercent)
+			quizResultDTO.setResult(true);
+		else {
+			
+			quizResultDTO.setResult(false);
+		}
+		return quizResultDTO;
+	}
+
 
 }

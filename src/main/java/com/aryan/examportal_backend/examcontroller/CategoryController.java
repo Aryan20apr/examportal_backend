@@ -6,6 +6,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,9 +33,10 @@ public class CategoryController {
 	//Add Category
 	
 	@PostMapping("/add")
-	public ResponseEntity<ApiResponse<CategoryDTO>> addCategory(@RequestBody CategoryDTO category)
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<ApiResponse<CategoryDTO>> addCategory(@RequestBody CategoryDTO category,@RequestParam Long userid)
 	{
-		CategoryDTO categoryDTO=categoryService.addCategory(category);
+		CategoryDTO categoryDTO=categoryService.addCategory(category,userid);
 		ApiResponse<CategoryDTO> apiResponse=new ApiResponse<>(categoryDTO,HttpStatus.CREATED,true);
 		return new ResponseEntity<ApiResponse<CategoryDTO>>(apiResponse,HttpStatus.CREATED);
 	}
@@ -54,8 +56,15 @@ public class CategoryController {
 		ApiResponse<List<CategoryDTO>> apiResponse=new ApiResponse<>(categorieSet,HttpStatus.OK,true);
 		return ResponseEntity.ok(apiResponse);
 	}
-	
+	@GetMapping("/allCategoriesbyuser")
+	public ResponseEntity<ApiResponse<List<CategoryDTO>>> getAllCategoriesByUser(@RequestParam Long userid)
+	{
+		List<CategoryDTO> categorieSet=categoryService.getCategoriesByUser(userid);
+		ApiResponse<List<CategoryDTO>> apiResponse=new ApiResponse<>(categorieSet,HttpStatus.OK,true);
+		return ResponseEntity.ok(apiResponse);
+	}
 	@PutMapping("/update")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<ApiResponse<CategoryDTO>> updateCategory(@RequestBody CategoryDTO category)
 	{
 		CategoryDTO categoryDTO=categoryService.updateCategory(category);
@@ -64,10 +73,29 @@ public class CategoryController {
 	}
 	
 	@DeleteMapping("/delete")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> deleteCategory(@RequestParam Long id)
 	{
 		categoryService.deleteCategory(id);
 		ApiResponse<String> apiResponse=new ApiResponse<>("Category Deleted Successfully",HttpStatus.CREATED,true);
+		return ResponseEntity.ok(apiResponse);
+	}
+	
+	@GetMapping("/getcategoriesenrolledbyuser")
+	
+	public ResponseEntity<ApiResponse<List<CategoryDTO>>> getAllEnrolledCategoriesByUser(@RequestParam Long userid)
+	{
+		List<CategoryDTO> categorieSet=categoryService.getenrolledSubjects(userid);
+		ApiResponse<List<CategoryDTO>> apiResponse=new ApiResponse<>(categorieSet,HttpStatus.OK,true);
+		return ResponseEntity.ok(apiResponse);
+	}
+	
+@GetMapping("/categories/notenrolled")
+	
+	public ResponseEntity<ApiResponse<List<CategoryDTO>>> getAllUnEnrolledCategoriesByUser(@RequestParam Long userid)
+	{
+		List<CategoryDTO> categorieSet=categoryService.getUnenrolledSubjects(userid);
+		ApiResponse<List<CategoryDTO>> apiResponse=new ApiResponse<>(categorieSet,HttpStatus.OK,true);
 		return ResponseEntity.ok(apiResponse);
 	}
 	

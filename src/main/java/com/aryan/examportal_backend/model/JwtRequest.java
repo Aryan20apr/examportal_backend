@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class JwtRequest //Use this to receive username and password from the user{
 {
-	String username;
+	String email;
 	String password;
 	
 	

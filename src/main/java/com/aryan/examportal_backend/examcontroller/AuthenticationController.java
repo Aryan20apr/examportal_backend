@@ -35,6 +35,7 @@ import com.aryan.examportal_backend.exceptions.UserDisabledException;
 import com.aryan.examportal_backend.model.JWTResponse;
 import com.aryan.examportal_backend.model.JwtRequest;
 import com.aryan.examportal_backend.model.User;
+import com.aryan.examportal_backend.payload.ApiResponse;
 import com.aryan.examportal_backend.payload.PasswordChangeDTO;
 import com.aryan.examportal_backend.payload.UserDTO;
 import com.aryan.examportal_backend.services.UserService;
@@ -69,10 +70,10 @@ public class AuthenticationController {
 	private void authenticate(JwtRequest jwtRequest) throws Exception
 	{//Use Runtime Exception instead for extending the custom exception classes and do not use try catch
 		try {
-			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(jwtRequest.getUsername(), jwtRequest.getPassword()));
+			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(jwtRequest.getEmail(), jwtRequest.getPassword()));
 			
 		} catch (DisabledException e) {
-			throw new UserDisabledException("User account disabled", jwtRequest.getUsername());
+			throw new UserDisabledException("User account disabled", jwtRequest.getEmail());
 		}
 		catch (BadCredentialsException e) {
 			
@@ -89,11 +90,15 @@ public class AuthenticationController {
 						e.printStackTrace();
 						throw new Exception("User Not Found");
 			}
+			System.out.println("Email="+jwtRequest.getEmail());
 			//User authenticated
-			UserDetails userDetails= userDetailService.loadUserByUsername(jwtRequest.getUsername());
+			UserDetails userDetails= userDetailService.loadUserByUsername(jwtRequest.getEmail());
+			
+			System.out.println("Username in userdetail ="+userDetails.getUsername());
 			String token=jwtUtils.generateToken(userDetails);
 			
-			return ResponseEntity.ok(new JWTResponse(token));
+			UserDTO userDTO=userService.getUserByEmail(jwtRequest.getEmail());
+			return ResponseEntity.ok(new JWTResponse<UserDTO>(userDTO,token,true));
 	}
 	@GetMapping("/current-user")
 	public User  getCurrentUser(Principal principal)
@@ -132,40 +137,42 @@ public class AuthenticationController {
 	        boolean b = emailService.sendEmail(email);
 
 	        if (b) {
-	            OTPSentResponse response = new OTPSentResponse(email, "OTP Sent Successfully");
+	            OTPSentResponse response = new OTPSentResponse(email, "OTP Sent Successfully",true);
 	            return new ResponseEntity<OTPSentResponse>(response, HttpStatus.OK);
 	        } else {
-	            OTPSentResponse response = new OTPSentResponse(email, "Could not send otp. Enter a valid email id.");
+	            OTPSentResponse response = new OTPSentResponse(email, "Could not send otp. Enter a valid email id.",false);
 	            return new ResponseEntity<OTPSentResponse>(response, HttpStatus.OK);
 	        }
 	    }
 
 	    @PostMapping("/verifyotp")
-	    public ResponseEntity<?> verifyOTP(@RequestParam int otp, HttpSession session) {
+	    public ResponseEntity<?> verifyOTP(@RequestParam int otp, @RequestParam String email, HttpSession session) {
 	        // Integer myOtp=(int)session.getAttribute("otp");
-
-	        String email = (String) session.getAttribute("email");// We can use session to remeber ceratin things
+	    	//System.out.println(session.getAttributeNames()+" "+session.getAttribute("email"));
+	    	
+	        //String email = (String) session.getAttribute("email");// We can use session to remeber ceratin things
 	        int serverOtp = otpService.getOtp(email);
 	        ApiResponse2 response = new ApiResponse2();
-
+	        
 	        System.out.println("Otp is " + serverOtp + " " + otp);
 
 	        if (serverOtp == otp) {
 	            System.out.println("##$%^");
+	            response.setData(email);
 	            response.setMessage("Email verified");
 	            response.setSuccess(true);
 	            otpService.clearOTP(email);
 
 	        } else {
-
+	        	response.setData(email);
 	            response.setMessage("OTP does not match");
 	            response.setSuccess(false);
 	        }
-	        return new ResponseEntity<ApiResponse2>(response, HttpStatus.UNAUTHORIZED);
+	        return new ResponseEntity<ApiResponse2<String>>(response, HttpStatus.OK);
 	    }
 	    
 	    @PostMapping("/forgotpassword")
-	    public ResponseEntity<ApiResponse2> changePassword(@Valid @RequestBody PasswordChangeDTO passinfo )
+	    public ResponseEntity<ApiResponse2<String>> changePassword(@Valid @RequestBody PasswordChangeDTO passinfo )
 	    {
 	        
 	        PasswordChangeStatus b=userService.forgotPassword(passinfo);
@@ -173,23 +180,71 @@ public class AuthenticationController {
 	        
 	        if(PasswordChangeStatus.PASSWORD_CHANGED==b)
 	        {
-	            response.setMessage("Password changed successfully");
+	        	response.setData(passinfo.getEmail());	            
+	        	response.setMessage("Password changed successfully");
 	            response.setSuccess(true);
-	            return new ResponseEntity<ApiResponse2>(response,HttpStatus.OK);
+	            return new ResponseEntity<ApiResponse2<String>>(response,HttpStatus.OK);
 	        }
 	     
 	        else {
 	            response.setMessage("User Does Not exist with this email");
 	            response.setSuccess(false);
-	            return new ResponseEntity<ApiResponse2>(response,HttpStatus.UNAUTHORIZED);
+	            return new ResponseEntity<ApiResponse2<String>>(response,HttpStatus.OK);
 	        }
 	        
 	    }
 	    @PostMapping("/register")
-	    public ResponseEntity<UserDTO> register(@RequestBody UserDTO userDTO) {
+	    public ResponseEntity<ApiResponse2<UserDTO>> register(@RequestBody UserDTO userDTO) {
 	        UserDTO registeredUser = userService.registerNewUser(userDTO);
-	        return new ResponseEntity<UserDTO>(registeredUser, HttpStatus.CREATED);
+	        //UserDetails userDetails= userDetailService.loadUserByUsername(registeredUser.getEmail());
+			//String token=jwtUtils.generateToken(userDetails);
+	        ApiResponse2<UserDTO> response=new ApiResponse2<UserDTO>();
+	        response.setData(registeredUser);
+	        response.setMessage("User created successfully");
+	        response.setSuccess(true);
+			ResponseEntity<ApiResponse2<UserDTO>> responseEntity=new  ResponseEntity<>(response, HttpStatus.CREATED);
+			        
+			return responseEntity;
 
 	    }
+	    @PostMapping("/registeradmin")
+	    public ResponseEntity<ApiResponse2<UserDTO>> registerAdmin(@RequestBody UserDTO userDTO) {
+	        UserDTO registeredUser = userService.registerAdmin(userDTO);
+	        //UserDetails userDetails= userDetailService.loadUserByUsername(registeredUser.getEmail());
+			//String token=jwtUtils.generateToken(userDetails);
+			
+			ApiResponse2<UserDTO> response=new ApiResponse2<UserDTO>();
+	        response.setData(registeredUser);
+	        response.setMessage("Admin account created successfully");
+	        response.setSuccess(true);
+	        ResponseEntity<ApiResponse2<UserDTO>> responseEntity=new  ResponseEntity<>(response, HttpStatus.CREATED);
+	        
+			return responseEntity;
+
+	    }
+	    
+	    @GetMapping("/getuserbyemail")
+	    
+	    	ResponseEntity<ApiResponse2<String>> getUserByEmail(@RequestParam String email)
+	    	{
+	    		UserDTO user=userService.getUserByEmail(email);
+	    		if(user!=null)
+	    		{
+	    			ApiResponse2<String> response=new ApiResponse2<>();
+	    			response.setData(email);
+	    			response.setMessage("User found");
+	    			response.setSuccess(true);
+	    			return new ResponseEntity<ApiResponse2<String>>(response,HttpStatus.OK);
+	    		}
+	    		else {
+	    			ApiResponse2<String> response=new ApiResponse2<String>();
+	    			response.setData(email);
+	    			response.setMessage("User Not found");
+	    			response.setSuccess(false);
+	    			return new ResponseEntity<ApiResponse2<String>>(response,HttpStatus.OK);
+				}
+	    	}
+	    
 	
 }
+

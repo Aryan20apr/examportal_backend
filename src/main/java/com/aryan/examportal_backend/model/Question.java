@@ -7,8 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-
-
+import javax.persistence.Transient;
 
 import lombok.Data;
 
@@ -28,6 +27,9 @@ public class Question {
 	private String option4;
 	private String answer;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@Transient //This prevents this column from being created in the database
+	private String givenAnswer;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Quiz quiz;
 }

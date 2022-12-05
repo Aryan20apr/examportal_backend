@@ -13,15 +13,21 @@ import com.aryan.examportal_backend.payload.QuizDTO;
 
 public interface QuizService {
 
-	public QuizDTO addQuiz(QuizDTO quiz);
+	public QuizDTO addQuiz(QuizDTO quiz,int userId);
 	
 	public Set<QuizDTO> getQuizzes();
 	
 	public QuizDTO getQuiz(Long quizId);
 	
+	public List<QuizDTO> getQuizzesByUser(Long userid,Long cid);
+	
 	public void deleteQuiz(Long quiz) throws NotFoundException;
 	
-	public QuizDTO updateQuiz(QuizDTO quiz);
+	public QuizDTO updateQuiz(QuizDTO quiz,long userid);
 	
 	public List<QuizDTO> getQuizzesByCategory(Long cid);
+	
+	public List<QuizDTO> getActiveQuizes();
+	
+	public List<QuizDTO> getActiveQuizesByCategory(Long cid);
 }

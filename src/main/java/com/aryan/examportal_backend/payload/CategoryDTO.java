@@ -19,4 +19,6 @@ Long cid;
 	
 	
 	//private Set<QuizDTO> quizes=new LinkedHashSet<>();
+	
+	//private UserDTO user;
 }

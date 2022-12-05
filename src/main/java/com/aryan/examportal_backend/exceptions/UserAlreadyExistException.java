@@ -1,5 +1,7 @@
 package com.aryan.examportal_backend.exceptions;
 
+import com.aryan.examportal_backend.payload.UserDTO;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,12 +10,16 @@ import lombok.Setter;
 public class UserAlreadyExistException extends RuntimeException{
 
 	
-	String username;
 	
 	
-	public UserAlreadyExistException(String username,String message)
+	UserDTO user;
+	boolean status;
+	
+	
+	public UserAlreadyExistException(UserDTO username,String message,boolean b)
 	{
 		super(message);
-		this.username=username;
+		this.user=username;
+		this.status=b;
 	}
 }

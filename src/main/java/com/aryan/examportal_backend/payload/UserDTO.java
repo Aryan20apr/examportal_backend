@@ -26,20 +26,23 @@ public class UserDTO {
 	@NotNull
 	 @NotBlank
 		@Size(min = 6,message = "Username cannot be less than 2 characters in length")
-	private String username;
+	private String nickname;
 	
-	@Size(min = 8,max=16,message = "Password must have atleast 6 characters and maximum 16 characters with atleast one Capital letter, special chracter and digit")
-	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")
+	//@Size(min = 8,max=16,message = "Password must have atleast 6 characters and maximum 16 characters with atleast one Capital letter, special chracter and digit")
+	/*
+	 * @Pattern(regexp =
+	 * "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")
+	 */
 	private String password;
 	
 	@NotNull
 	 @NotBlank
 		@Size(min = 2,message = "First name cannot be less than 2 characters in length")
-	private String firstname;
+	private String firstName;
 		@NotNull
 		@NotBlank
 		@Size(min = 2,message = "Last name cannot be less than 2 characters in length")
-	private String lastname;
+	private String lastName;
 	
 	@NotNull
 		 @NotBlank

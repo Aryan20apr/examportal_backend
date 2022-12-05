@@ -1,6 +1,7 @@
 package com.aryan.examportal_backend.examcontroller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -9,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.event.PublicInvocationEvent;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.aryan.examportal_backend.ApiResponse2;
 import com.aryan.examportal_backend.Constants.PasswordChangeStatus;
 import com.aryan.examportal_backend.payload.ApiResponse;
+import com.aryan.examportal_backend.payload.CategoryDTO;
 import com.aryan.examportal_backend.payload.PasswordChangeDTO;
 import com.aryan.examportal_backend.payload.UserDTO;
 import com.aryan.examportal_backend.services.UserService;
@@ -48,17 +51,22 @@ public class UserController {
 	}
 	//Getting user by username
 	@GetMapping("/getUser")
-	public UserDTO getUser(@RequestParam String username) 
+	public ResponseEntity<?> getUser(@RequestParam String email) 
 		
 	
 	{
-		System.out.println("Username="+username);
+		System.out.println("Username="+email);
+		ApiResponse2<UserDTO> response2=new ApiResponse2<UserDTO>();
+		UserDTO user =userService.getUserByEmail(email);
+		response2.setData(user);
+		response2.setMessage("User found");
+		response2.setSuccess(true);
 		
-		return userService.getUserByUserName(username);
+		return new ResponseEntity<ApiResponse2<UserDTO>>(response2,HttpStatus.OK);
 	}
 	//delete user by id
-	 @PreAuthorize("hasRole('ADMIN')")
-	@DeleteMapping("/deleteUser")
+	 @PreAuthorize("hasRole('ROLE_ADMIN')")
+	@DeleteMapping("/deleteuser")
 	public ResponseEntity<ApiResponse<Map<String,String>>> deleteUserById(@RequestParam Long userid)
 	
 	{
@@ -69,10 +77,10 @@ public class UserController {
 		return new ResponseEntity<ApiResponse<Map<String,String>>>(new ApiResponse(map,HttpStatus.OK,true),HttpStatus.OK); 
 	}
 	
-	@PutMapping("/updateUser/{username}")
-	public ResponseEntity<ApiResponse<UserDTO>> updateUser(@Valid @RequestBody UserDTO updatedUser,@PathVariable String username)
+	@PutMapping("/updateuser")
+	public ResponseEntity<ApiResponse<UserDTO>> updateUser(@Valid @RequestBody UserDTO updatedUser)
 	{
-		UserDTO user=userService.updateUser(updatedUser,username);
+		UserDTO user=userService.updateUser(updatedUser);
 		ApiResponse<UserDTO> apiResponse=new ApiResponse<>(user,HttpStatus.ACCEPTED,true);
 		return new ResponseEntity<ApiResponse<UserDTO>>(apiResponse,HttpStatus.ACCEPTED);
 	}
@@ -101,7 +109,30 @@ public class UserController {
             return new ResponseEntity<ApiResponse2>(response,HttpStatus.UNAUTHORIZED);
         }
         
+       
+        
     }
-	
+	 @PreAuthorize("hasRole('ROLE_ADMIN')")
+ 	@GetMapping("/getcategorystudents")
+     public ResponseEntity<ApiResponse<List<UserDTO>>> getusersEnrolled(@RequestParam long cid)
+     {
+     	List<UserDTO> userDTOs=userService.findUserInSubject(cid);
+     	ApiResponse<List<UserDTO>> response=new ApiResponse<List<UserDTO>>();
+     	response.setData(userDTOs);
+     	response.setHttpStatus(HttpStatus.OK);
+     	response.setSuccess(true);
+     	return new ResponseEntity<ApiResponse<List<UserDTO>>>(response,HttpStatus.OK);
+     }
+	 
+	 @PostMapping("/enrollinsubject")
+	 public ResponseEntity<ApiResponse<CategoryDTO>> enrollInCategory(@RequestParam long cid,@RequestParam long userid)
+	 {
+		 CategoryDTO categoryDTO=userService.enrollInCategory(cid, userid);
+		 ApiResponse<CategoryDTO> response=new ApiResponse<CategoryDTO>();
+		 response.setData(categoryDTO);
+		 response.setHttpStatus(HttpStatus.ACCEPTED);
+		 response.setSuccess(true);
+		 return new ResponseEntity<ApiResponse<CategoryDTO>>(response,HttpStatus.OK);
+	 }
 	
 }

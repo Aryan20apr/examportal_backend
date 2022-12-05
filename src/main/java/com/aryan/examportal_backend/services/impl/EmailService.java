@@ -172,10 +172,10 @@ public class EmailService {
         
         //get the system properties
         
-        Optional<User> optional=userRepo.findByEmail(recepient);
-        User user=optional.get();
-        if(user==null)
-            return false;
+       //User user=userRepo.findByEmail(recepient);
+        
+//        if(user==null)
+//            return false;
         
         Properties properties=System.getProperties();
         System.out.println(properties);
@@ -242,8 +242,8 @@ public class EmailService {
            boolean sent=false;
          //smtp.gmail.com
             //Constants.gmailHost is the It is the server through which email has to be sent using Simple Mail transfer protocol
-           Optional<User> optional=userRepo.findByEmail(recepient);
-           User user=optional.get();
+           User user=userRepo.findByEmail(recepient);
+           
            if(user==null)
                return false;
             //get the system properties

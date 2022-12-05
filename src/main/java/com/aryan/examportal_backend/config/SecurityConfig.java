@@ -53,7 +53,8 @@ public class SecurityConfig {
 	                .anyRequest()
 	                .authenticated()//Authenticate any other request which is received
 	                .and().exceptionHandling()//If authentications fails or no JWT token is provided
-	                .authenticationEntryPoint(unAuthorizedHandler)// If at any time, any exception is generated
+	                .authenticationEntryPoint(unAuthorizedHandler)
+	                // If at any time, any exception is generated
 	                                                                           // due to unauthourization, the commence
 	                                                                           // method will be executed inside the
 	                                                                           // JwtAuthenticationEntryPoint

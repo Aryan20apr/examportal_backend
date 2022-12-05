@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aryan.examportal_backend.model.Quiz;
+import com.aryan.examportal_backend.ApiResponse2;
 import com.aryan.examportal_backend.payload.ApiResponse;
 import com.aryan.examportal_backend.payload.QuestionDTO;
-import com.aryan.examportal_backend.payload.QuestionDTO;
+import com.aryan.examportal_backend.payload.QuizResultDTO;
 import com.aryan.examportal_backend.services.QuestionService;
 
 
@@ -28,24 +28,24 @@ public class QuestionController {
 	@Autowired
 	private QuestionService questionService;
 	
-	@PostMapping("/add")
+	@PostMapping("")
 	
-	public ResponseEntity<ApiResponse<QuestionDTO>> addQuestion(@RequestBody QuestionDTO question)
-	{
-		QuestionDTO QuestionDTO=questionService.addQuestion(question);
-		ApiResponse<QuestionDTO> apiResponse=new ApiResponse(QuestionDTO,HttpStatus.CREATED,true);
+	public ResponseEntity<ApiResponse<QuestionDTO>> addQuestion(@RequestBody QuestionDTO question,@RequestParam Long qid){
+		System.out.println("qid="+qid);
+		QuestionDTO QuestionDTO=questionService.addQuestion(question,qid);
+		ApiResponse<QuestionDTO> apiResponse=new ApiResponse<QuestionDTO>(QuestionDTO,HttpStatus.CREATED,true);
 		return new ResponseEntity<ApiResponse<QuestionDTO>>(apiResponse,HttpStatus.CREATED);
 	}
 	
-@PutMapping("/update")
+@PutMapping("/")
 	
-	public ResponseEntity<ApiResponse<QuestionDTO>> updateQuestion(@RequestBody QuestionDTO question)
-	{
+	public ResponseEntity<ApiResponse<QuestionDTO>> updateQuestion(@RequestBody QuestionDTO question/**,@RequestParam long qid*/){
+	System.out.println("Question id is "+question.getQId()+" content is "+question.getContent());
 		QuestionDTO QuestionDTO=questionService.updateQuestion(question);
 		ApiResponse<QuestionDTO> apiResponse=new ApiResponse<>(QuestionDTO,HttpStatus.OK,true);
 		return new ResponseEntity<ApiResponse<QuestionDTO>>(apiResponse,HttpStatus.OK);
 	}
-@GetMapping("/get")
+@GetMapping("/byid")
 public ResponseEntity<ApiResponse<QuestionDTO>> getQuestion(@RequestParam Long questionId)
 {
 	QuestionDTO QuestionDTO=questionService.getQuestion(questionId);
@@ -61,7 +61,7 @@ public ResponseEntity<ApiResponse<Set<QuestionDTO>>> getAllQuestions()
 	return ResponseEntity.ok(apiResponse);
 }
 
-@DeleteMapping("/delete")
+@DeleteMapping("/byid")
 public ResponseEntity<?> deleteQuestion(@RequestParam Long id)
 {
 	questionService.deleteQuestion(id);
@@ -76,9 +76,23 @@ public ResponseEntity<?> deleteQuestion(@RequestParam Long id)
 		
 		
 		
-		List<QuestionDTO> QuestionSet=questionService.getQuestionsOfQuiz(quizId);
+		List<QuestionDTO> QuestionSet=questionService.getAllQuestionsOfQuiz(quizId);
 		ApiResponse<List<QuestionDTO>> apiResponse=new ApiResponse<>(QuestionSet,HttpStatus.OK,true);
 		return ResponseEntity.ok(apiResponse);
 	}
-
+	
+	//evaluating the quiz
+	@PostMapping("evalquiz")
+	public ResponseEntity<ApiResponse2<QuizResultDTO>> evalQuiz(@RequestBody List<QuestionDTO> questions)
+	{
+		System.out.println(questions);
+		
+	 QuizResultDTO quizResultDTO=questionService.evaluateQuiz(questions);
+		
+	 ApiResponse2<QuizResultDTO> apiResponse2=new ApiResponse2<>();
+	 apiResponse2.setData(quizResultDTO);
+	 apiResponse2.setMessage("Quiz Evaluated");
+	 apiResponse2.setSuccess(true);
+		return ResponseEntity.ok(apiResponse2);
+	}
 }

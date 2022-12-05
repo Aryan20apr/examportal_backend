@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.aryan.examportal_backend.exceptions.TokenExpiredException;
 import com.aryan.examportal_backend.services.impl.UserDetailServiceImpl;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -32,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 	private JwtUtils jwtUtils;//This token has all the methds who can generate and validate token 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
+			throws ServletException, IOException,TokenExpiredException {
 		System.out.println("Insisde doFilterInternal");
 		
 		String requestTokenHeader=request.getHeader("Authorization");
@@ -44,11 +45,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 		{
 			try {
 				jwtToken=requestTokenHeader.substring(7);
+				
 				username=jwtUtils.extractUsername(jwtToken);
+				System.out.println("username extracted="+username);
 				
 			} catch ( ExpiredJwtException e) {
-				e.printStackTrace();
-				System.out.println("JWT Token has expired");
+				//throw new TokenExpiredException();
 			}
 			catch (Exception e) {
 				e.printStackTrace();

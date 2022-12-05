@@ -11,7 +11,7 @@ import com.google.common.cache.LoadingCache;
 
 @Service
 public class OTPService {
-    private static final Integer EXPIRE_MINS = 5;
+    private static final Integer EXPIRE_MINS = 10;
     private LoadingCache<String, Integer> otpCache;
     
     public OTPService(){
@@ -31,6 +31,7 @@ public class OTPService {
      });
    }
     public int generateOTP(String key){
+    	System.out.println("##Key="+key);
         Random random = new Random();
         int otp = 100000 + random.nextInt(900000);
         otpCache.put(key, otp);
@@ -38,6 +39,7 @@ public class OTPService {
          }
         
          public int getOtp(String key){ 
+        	 System.out.println("Key="+key);
         try{
          return  otpCache.get(key); 
         }catch (Exception e){
