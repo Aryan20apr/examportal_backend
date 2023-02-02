@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class QuizResultDTO {
-		double totalMarksObtained;
-		double totalAttempted;
-		double correctAnswers;
+	
+		QuizScoreDTO quizScore;
+		
 		boolean result;
 }

@@ -23,5 +23,5 @@ public interface QuestionService {
 	public List<QuestionDTO> getQuestionsOfQuiz(Long quizId);
 	public List<QuestionDTO> getAllQuestionsOfQuiz(Long quizId);
 	
-	public QuizResultDTO evaluateQuiz(List<QuestionDTO> responses);
+	//public QuizResultDTO evaluateQuiz(List<QuestionDTO> responses);
 }

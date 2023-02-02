@@ -81,18 +81,7 @@ public ResponseEntity<?> deleteQuestion(@RequestParam Long id)
 		return ResponseEntity.ok(apiResponse);
 	}
 	
-	//evaluating the quiz
-	@PostMapping("evalquiz")
-	public ResponseEntity<ApiResponse2<QuizResultDTO>> evalQuiz(@RequestBody List<QuestionDTO> questions)
-	{
-		System.out.println(questions);
 		
-	 QuizResultDTO quizResultDTO=questionService.evaluateQuiz(questions);
-		
-	 ApiResponse2<QuizResultDTO> apiResponse2=new ApiResponse2<>();
-	 apiResponse2.setData(quizResultDTO);
-	 apiResponse2.setMessage("Quiz Evaluated");
-	 apiResponse2.setSuccess(true);
-		return ResponseEntity.ok(apiResponse2);
-	}
+//	@PostMapping("/submitquiz")
+//	public ResponseEntity<?> submitQuiz
 }

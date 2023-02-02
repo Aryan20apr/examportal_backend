@@ -89,8 +89,8 @@ public class QuizServiceImpl implements QuizService {
 	}
 
 	@Override
-	public List<QuizDTO> getActiveQuizesByCategory(Long cid) {
-		List<Quiz> quizList=quizRepository.findActiveQuizesByCategoryCid(cid);
+	public List<QuizDTO> getActiveQuizesByCategory(Long cid,Long userid) {
+		List<Quiz> quizList=quizRepository.findActiveQuizesByCategoryCid(cid,userid);
 		List<QuizDTO>quizzes= quizList.stream().map((quiz)-> this.modelMapper.map(quiz, QuizDTO.class)).collect(Collectors.toList());
 		return quizzes;
 		

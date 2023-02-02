@@ -14,8 +14,8 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
 	@Query("SELECT q from Quiz q where q.user.id=:userid and q.category.cid=:cid")
 	public List<Quiz> findByUserIdOfCategory(Long userid,Long cid);
 	
-	@Query("SELECT q from Quiz q where q.active=true and q.category.cid=:cid")
-	public List<Quiz> findActiveQuizesByCategoryCid(Long cid);
+	@Query("SELECT q from Quiz q where q.active=true and q.category.cid=:cid and q.qid not in (select qs.quiz.qid from QuizScore qs where qs.user.id =:userid )")
+	public List<Quiz> findActiveQuizesByCategoryCid(Long cid,Long userid);
 	
 	@Query("SELECT q from Quiz q where q.active=true")
 	public List<Quiz> findActiveQuizes();

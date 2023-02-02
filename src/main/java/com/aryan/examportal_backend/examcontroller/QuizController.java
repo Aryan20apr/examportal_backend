@@ -34,6 +34,7 @@ public class QuizController {
 	public ResponseEntity<ApiResponse<QuizDTO>> addQuiz(@RequestBody QuizDTO quiz,@RequestParam int userid)
 	{
 		QuizDTO quizDTO=quizService.addQuiz(quiz,userid);
+		System.out.println("Quiz Duration is "+quiz.getQuizDuration());
 		ApiResponse<QuizDTO> apiResponse=new ApiResponse<>(quizDTO,HttpStatus.CREATED,true);
 		return new ResponseEntity<ApiResponse<QuizDTO>>(apiResponse,HttpStatus.CREATED);
 	}
@@ -90,9 +91,9 @@ public ResponseEntity<ApiResponse<List<QuizDTO>>> getQuizByCategory(@RequestPara
 }
 
 @GetMapping("/getactivebycategory")
-public ResponseEntity<ApiResponse<List<QuizDTO>>> getActiveQuizByCategory(@RequestParam Long cid)
+public ResponseEntity<ApiResponse<List<QuizDTO>>> getActiveQuizByCategory(@RequestParam Long cid,@RequestParam Long userid)
 {
-	List<QuizDTO> quizzes=quizService.getActiveQuizesByCategory(cid);
+	List<QuizDTO> quizzes=quizService.getActiveQuizesByCategory(cid,userid);
 	ApiResponse<List<QuizDTO>> apiResponse=new ApiResponse<>(quizzes,HttpStatus.OK,true);
 	return new ResponseEntity<ApiResponse<List<QuizDTO>>>(apiResponse,HttpStatus.OK);
 }
@@ -104,4 +105,6 @@ public ResponseEntity<ApiResponse<List<QuizDTO>>> getQuizByUser(@RequestParam Lo
 	ApiResponse<List<QuizDTO>> apiResponse=new ApiResponse<>(quizzes,HttpStatus.OK,true);
 	return new ResponseEntity<ApiResponse<List<QuizDTO>>>(apiResponse,HttpStatus.OK);
 }
+
+
 }

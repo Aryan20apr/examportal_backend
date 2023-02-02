@@ -97,7 +97,7 @@ public class QuestionServiceImpl implements QuestionService {
 	@Override
 	public List<QuestionDTO> getAllQuestionsOfQuiz(Long quizId) {
 		Optional<Quiz> q =quizRepository.findById(quizId);
-		Quiz quiz=q.get();
+		//Quiz quiz=q.get();
 		//int numberOfQuestions=quiz.getNumberOfQuestions();
 		//Set<Question> questions=quiz.getQuestions();
 		List<Question> questionList=questionRepository.findByQuiz(q);
@@ -114,43 +114,7 @@ public class QuestionServiceImpl implements QuestionService {
 		return questionDTOs;
 	}
 
-	@Override
-	public QuizResultDTO evaluateQuiz(List<QuestionDTO> responses) {
-		
-		double totalMarksObtained=0.0;
-		Integer correctAnswers=0;
-		Integer attempted=0;
-		double passpercent=40.0;
-		int maxMarks=0;
-		for(QuestionDTO q: responses)
-		{
-			Question question=	questionRepository.findById(q.getQId()).get();
-			if(question.getAnswer().trim().equals(q.getGivenAnswer().trim()))
-			{
-				correctAnswers++;
-				
-				maxMarks=question.getQuiz().getMaxMarks();
-				double marksSingle=maxMarks/question.getQuiz().getNumberOfQuestions();
-				System.out.println("maxMarks="+maxMarks+ "number of questions "+question.getQuiz().getNumberOfQuestions());
-				totalMarksObtained+=marksSingle;
-			}
-			if(q.getGivenAnswer()!=null||!q.getGivenAnswer().trim().equals("")) {
-			attempted++;
-			}
-			
-		}
-		QuizResultDTO quizResultDTO=new QuizResultDTO();
-		quizResultDTO.setTotalAttempted(attempted);
-		quizResultDTO.setCorrectAnswers(correctAnswers);
-		quizResultDTO.setTotalMarksObtained(totalMarksObtained);
-		if(totalMarksObtained/maxMarks*100>=passpercent)
-			quizResultDTO.setResult(true);
-		else {
-			
-			quizResultDTO.setResult(false);
-		}
-		return quizResultDTO;
-	}
+
 
 
 }

@@ -29,5 +29,5 @@ public interface QuizService {
 	
 	public List<QuizDTO> getActiveQuizes();
 	
-	public List<QuizDTO> getActiveQuizesByCategory(Long cid);
+	public List<QuizDTO> getActiveQuizesByCategory(Long cid,Long userid);//user id is required to find un-attempted  quizzes
 }

@@ -17,7 +17,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -73,6 +72,9 @@ public class User implements UserDetails // Make User as the implementation clas
 	 @ManyToMany(cascade=CascadeType.ALL,fetch = FetchType.EAGER)//When use is created, role also created 
 		@JoinTable(name = "students_enrolled", joinColumns = @JoinColumn(name = "userid", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "categoryid", referencedColumnName = "cid"))
 		private List<Category> subjectsEnrolled = new ArrayList<>();
+	 
+	 @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+	 List<QuizScore> quizScores;
 	 
 	public User() {
 

@@ -1,10 +1,9 @@
 package com.aryan.examportal_backend.model;
 
+import java.sql.Time;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,14 +12,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @NoArgsConstructor
@@ -53,6 +48,12 @@ private String description;
 	private User user;
 	
 	private String title;
+	
+	//@Temporal(TemporalType.TIME)
+	private Time quizDuration;
+	
+	@OneToMany(mappedBy = "quiz",fetch = FetchType.LAZY)
+	List<QuizScore> quizScores;
 	
 	
 	
