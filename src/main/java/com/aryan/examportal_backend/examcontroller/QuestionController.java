@@ -15,10 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aryan.examportal_backend.ApiResponse2;
 import com.aryan.examportal_backend.payload.ApiResponse;
 import com.aryan.examportal_backend.payload.QuestionDTO;
-import com.aryan.examportal_backend.payload.QuizResultDTO;
 import com.aryan.examportal_backend.services.QuestionService;
 
 

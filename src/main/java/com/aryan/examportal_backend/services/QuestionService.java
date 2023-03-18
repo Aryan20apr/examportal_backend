@@ -3,10 +3,7 @@ package com.aryan.examportal_backend.services;
 import java.util.List;
 import java.util.Set;
 
-import com.aryan.examportal_backend.model.Question;
-
 import com.aryan.examportal_backend.payload.QuestionDTO;
-import com.aryan.examportal_backend.payload.QuizResultDTO;
 
 public interface QuestionService {
 

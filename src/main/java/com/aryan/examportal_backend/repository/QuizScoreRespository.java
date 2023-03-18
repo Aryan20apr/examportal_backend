@@ -8,7 +8,6 @@ import com.aryan.examportal_backend.model.Quiz;
 import com.aryan.examportal_backend.model.QuizMarksKey;
 import com.aryan.examportal_backend.model.QuizScore;
 import com.aryan.examportal_backend.model.User;
-import com.aryan.examportal_backend.payload.AdminQuizHistoryDTO;
 
 public interface QuizScoreRespository extends JpaRepository<QuizScore, QuizMarksKey>{
 

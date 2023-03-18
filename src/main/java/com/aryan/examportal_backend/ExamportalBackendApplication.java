@@ -3,18 +3,14 @@ package com.aryan.examportal_backend;
 
 import java.util.List;
 
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-
 import com.aryan.examportal_backend.model.Role;
-
 import com.aryan.examportal_backend.repository.RoleRepository;
 
 

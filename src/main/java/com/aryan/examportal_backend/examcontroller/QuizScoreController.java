@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.event.PublicInvocationEvent;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,11 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aryan.examportal_backend.ApiResponse2;
+import com.aryan.examportal_backend.payload.AdminQuizHistoryDTO;
 import com.aryan.examportal_backend.payload.QuestionDTO;
-import com.aryan.examportal_backend.payload.QuizResultDTO;
 import com.aryan.examportal_backend.payload.QuizScoreDTO;
 import com.aryan.examportal_backend.payload.StudentQuizHistoryDTO;
-import com.aryan.examportal_backend.payload.AdminQuizHistoryDTO;
 import com.aryan.examportal_backend.services.QuizScoreService;
 
 

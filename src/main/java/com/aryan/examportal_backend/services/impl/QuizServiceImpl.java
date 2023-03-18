@@ -3,7 +3,6 @@ package com.aryan.examportal_backend.services.impl;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.LongFunction;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -12,14 +11,10 @@ import org.springframework.stereotype.Service;
 
 import com.aryan.examportal_backend.exceptions.NotFoundException;
 import com.aryan.examportal_backend.model.Quiz;
-
 import com.aryan.examportal_backend.payload.QuizDTO;
-
 import com.aryan.examportal_backend.repository.QuizRepository;
 import com.aryan.examportal_backend.repository.UserRepository;
 import com.aryan.examportal_backend.services.QuizService;
-
-import lombok.With;
 
 @Service
 public class QuizServiceImpl implements QuizService {

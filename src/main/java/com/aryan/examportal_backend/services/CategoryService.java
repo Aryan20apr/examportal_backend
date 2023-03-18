@@ -1,9 +1,7 @@
 package com.aryan.examportal_backend.services;
 
 import java.util.List;
-import java.util.Set;
 
-import com.aryan.examportal_backend.model.Category;
 import com.aryan.examportal_backend.payload.CategoryDTO;
 
 public interface CategoryService {

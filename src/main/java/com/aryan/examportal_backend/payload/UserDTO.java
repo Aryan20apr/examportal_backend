@@ -6,10 +6,7 @@ import java.util.Set;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
-import com.aryan.examportal_backend.model.UserRole;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,9 +1,7 @@
 package com.aryan.examportal_backend.services.impl;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,12 +14,10 @@ import com.aryan.examportal_backend.model.Quiz;
 import com.aryan.examportal_backend.model.QuizMarksKey;
 import com.aryan.examportal_backend.model.QuizScore;
 import com.aryan.examportal_backend.model.User;
-import com.aryan.examportal_backend.payload.CategoryDTO;
+import com.aryan.examportal_backend.payload.AdminQuizHistoryDTO;
 import com.aryan.examportal_backend.payload.QuestionDTO;
-import com.aryan.examportal_backend.payload.QuizResultDTO;
 import com.aryan.examportal_backend.payload.QuizScoreDTO;
 import com.aryan.examportal_backend.payload.StudentQuizHistoryDTO;
-import com.aryan.examportal_backend.payload.AdminQuizHistoryDTO;
 import com.aryan.examportal_backend.repository.QuestionRepository;
 import com.aryan.examportal_backend.repository.QuizRepository;
 import com.aryan.examportal_backend.repository.QuizScoreRespository;

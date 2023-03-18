@@ -8,10 +8,8 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 
 import com.aryan.examportal_backend.Constants.PasswordChangeStatus;
 import com.aryan.examportal_backend.exceptions.UserAlreadyExistException;

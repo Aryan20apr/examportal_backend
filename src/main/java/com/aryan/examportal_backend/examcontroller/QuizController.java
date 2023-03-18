@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.aryan.examportal_backend.exceptions.NotFoundException;
 import com.aryan.examportal_backend.payload.ApiResponse;
-import com.aryan.examportal_backend.payload.CategoryDTO;
 import com.aryan.examportal_backend.payload.QuizDTO;
 import com.aryan.examportal_backend.services.QuizService;
 

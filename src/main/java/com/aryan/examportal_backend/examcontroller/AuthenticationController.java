@@ -3,8 +3,6 @@ package com.aryan.examportal_backend.examcontroller;
 
 
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -17,7 +15,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,7 +32,6 @@ import com.aryan.examportal_backend.exceptions.UserDisabledException;
 import com.aryan.examportal_backend.model.JWTResponse;
 import com.aryan.examportal_backend.model.JwtRequest;
 import com.aryan.examportal_backend.model.User;
-import com.aryan.examportal_backend.payload.ApiResponse;
 import com.aryan.examportal_backend.payload.PasswordChangeDTO;
 import com.aryan.examportal_backend.payload.UserDTO;
 import com.aryan.examportal_backend.services.UserService;

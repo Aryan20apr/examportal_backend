@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import com.aryan.examportal_backend.model.Question;
 import com.aryan.examportal_backend.model.Quiz;
 import com.aryan.examportal_backend.payload.QuestionDTO;
-import com.aryan.examportal_backend.payload.QuizResultDTO;
 import com.aryan.examportal_backend.repository.QuestionRepository;
 import com.aryan.examportal_backend.repository.QuizRepository;
 import com.aryan.examportal_backend.services.QuestionService;

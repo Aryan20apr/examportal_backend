@@ -1,7 +1,6 @@
 package com.aryan.examportal_backend.services.impl;
 
 import java.io.File;
-import java.util.Optional;
 import java.util.Properties;
 
 import javax.mail.Authenticator;
@@ -17,7 +16,6 @@ import javax.mail.internet.MimeMultipart;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 import com.aryan.examportal_backend.Constants;
 import com.aryan.examportal_backend.model.User;
