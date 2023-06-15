@@ -95,6 +95,12 @@
     <artifactId>guava</artifactId>
     <version>31.1-jre</version>
 </dependency>
+
+<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc</artifactId>
+			<scope>runtime</scope>
+		</dependency>
  <!-- https://mvnrepository.com/artifact/com.sun.mail/jakarta.mail -->
 <dependency>
 			<groupId>org.springframework.boot</groupId>
