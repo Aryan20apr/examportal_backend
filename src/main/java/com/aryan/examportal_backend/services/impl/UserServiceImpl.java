@@ -1,5 +1,6 @@
 package com.aryan.examportal_backend.services.impl;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -293,8 +294,12 @@ public class UserServiceImpl implements UserService{
 			Optional<Category> optional=categoryRepository.findById(cid);
 			Category category=optional.get();
 			User user=userRepository.findById(userid).get();
-			
+		List<Category>categories=user.getSubjectsEnrolled();
+		if(categories.contains(category)==false)
+		{
 			user.getSubjectsEnrolled().add(category);
+		}
+			
 			userRepository.save(user);
 			return modelMapper.map(category,CategoryDTO.class);
 		}

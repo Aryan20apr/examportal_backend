@@ -48,6 +48,35 @@ public class Category {
 	 @ManyToMany(fetch = FetchType.LAZY,mappedBy = "subjectsEnrolled")
 	 @JsonIgnore 
 	 private List<User> usersEnrolled=new ArrayList<>();
+
+	
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Category other = (Category) obj;
+		if (cid == null) {
+			if (other.cid != null)
+				return false;
+		} else if (!cid.equals(other.cid))
+			return false;
+		if (title == null) {
+			if (other.title != null)
+				return false;
+		} else if (!title.equals(other.title))
+			return false;
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
+			return false;
+		return true;
+	}
 	
 	/*
 	 * @ManyToOne private User user;

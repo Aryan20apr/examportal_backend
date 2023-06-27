@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,6 +38,7 @@ public class SecurityConfig {
 	public static final String[] PUBLIC_URLS = {
 			/* "/generate-token" *//* ,"/user/newuser", *//* "/", */"/examportal/auth/**"};
 	
+			
 	 @Bean
 	    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 	        http.csrf()//Cross-Site Request Forgery (CSRF) is an attack that forces authenticated users to submit a request to a Web application against which they are currently authenticated.
@@ -70,9 +72,7 @@ public class SecurityConfig {
 	        //Everytime a request is received, every time we need to check if it has a valid token. It takes out the token from the header before every request is proceeded and checks it
 	        http.addFilterBefore(this.jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 	        http.authenticationProvider(daoAuthenticationProvider());
-	        DefaultSecurityFilterChain defaultSecurityFilterChain = http.build();
-
-	        return defaultSecurityFilterChain;
+	        return http.build();
 	    }
 	 @Bean
 	    public DaoAuthenticationProvider daoAuthenticationProvider()// Needed for authenticating using the database . Other method is In-memory
@@ -85,11 +85,11 @@ public class SecurityConfig {
 
 	    }
 
-	    @Bean
-	    public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration configuration) throws Exception {
-	        // Required to authenticate the password
-	        return configuration.getAuthenticationManager();
-	    }
+	    // @Bean
+	    // public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration configuration) throws Exception {
+	    //     // Required to authenticate the password
+	    //     return configuration.getAuthenticationManager();
+	    // }
 
 		
 		  @Bean public PasswordEncoder passwordEncoder() { return new
