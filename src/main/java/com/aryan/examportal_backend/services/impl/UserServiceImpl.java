@@ -299,6 +299,8 @@ public class UserServiceImpl implements UserService{
 		{
 			user.getSubjectsEnrolled().add(category);
 		}
+		
+
 			
 			userRepository.save(user);
 			return modelMapper.map(category,CategoryDTO.class);
